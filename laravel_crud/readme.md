@@ -315,6 +315,37 @@ Route::get('/hello', [
 ]);
 ~~~
 
+## how to use random id from database inside factory  
+
+~~~php
+$factory->define(App\Note::class, function (Faker $faker) {
+    return [
+      'title' => $faker->sentence,
+      'description' => $faker->paragraph(4),
+      'user_id' => function () {
+        return User::all()->random();
+      }
+    ];
+});
+~~~
+
+## how to use user value in factory 
+
+~~~php
+
+$users = [
+  [
+    'name' => 'nur',
+    'email' => 'nur@gmail.com'
+  ]
+];
+foreach ($users as $user) {
+  factory(User::class)->create([
+    'name' => $user['name'],
+    'email' => $user['email']
+  ]);
+}
+~~~
 
 
 
