@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 class NoteController extends Controller
 {
     public function __construct () {
-        $this->middleware('auth')->except(['index', 'show']);
+        // $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('auth');
     }
     /**
      * Display a listing of the resource.
@@ -17,7 +18,7 @@ class NoteController extends Controller
      */
     public function index()
     {
-        $notes = Note::orderBy('id', 'desc')->paginate(10);
+        $notes = Note::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->paginate(10);
         return view('notes.index', compact('notes'));
     }
 
@@ -48,7 +49,8 @@ class NoteController extends Controller
         $description = $request->input('description');
         Note::create([
             'title' => $title,
-            'description' => $description
+            'description' => $description,
+            'user_id' => auth()->user()->id
         ]);
         return redirect(route('notes.index'));
     }
